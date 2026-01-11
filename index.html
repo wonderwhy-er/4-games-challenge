@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4 Games Challenge | Built by Desktop Commander</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --neon-pink: #ff006e;
+            --neon-cyan: #00f5ff;
+            --neon-yellow: #ffbe0b;
+            --neon-green: #39ff14;
+            --dark-bg: #0a0a0f;
+            --card-bg: #12121a;
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: var(--dark-bg);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .glitch-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(1.5rem, 5vw, 3rem);
+            color: var(--neon-cyan);
+            text-shadow: 
+                0 0 10px var(--neon-cyan),
+                0 0 20px var(--neon-cyan),
+                0 0 40px var(--neon-cyan),
+                3px 3px 0 var(--neon-pink);
+            animation: flicker 3s infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            92% { opacity: 1; }
+            93% { opacity: 0.8; }
+            94% { opacity: 1; }
+            95% { opacity: 0.9; }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .highlight {
+            color: var(--neon-yellow);
+            font-weight: 700;
+        }
+
+        /* Story section */
+        .story {
+            background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 0, 110, 0.05) 100%);
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            font-size: 120px;
+            color: var(--neon-pink);
+            opacity: 0.1;
+            font-family: Georgia, serif;
+        }
+
+        .story h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            color: var(--neon-pink);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .story h2::before {
+            content: '>';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .story p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.9;
+            margin-bottom: 15px;
+        }
+
+        .story .quote {
+            border-left: 3px solid var(--neon-cyan);
+            padding-left: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            color: var(--neon-cyan);
+        }
+
+        /* Games grid */
+        .games-section h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            color: var(--neon-green);
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px var(--neon-green);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border: 2px solid transparent;
+            border-radius: 16px;
+            padding: 30px;
+            text-decoration: none;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--card-color) 0%, transparent 60%);
+            opacity: 0.1;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: var(--card-color);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px var(--card-color),
+                inset 0 0 30px rgba(255, 255, 255, 0.02);
+        }
+
+        .game-card:hover::before {
+            opacity: 0.2;
+        }
+
+        .game-card.snake { --card-color: var(--neon-green); }
+        .game-card.pong { --card-color: var(--neon-cyan); }
+        .game-card.breakout { --card-color: var(--neon-pink); }
+        .game-card.game-2048 { --card-color: var(--neon-yellow); }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .game-card h3 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            color: var(--card-color);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--card-color);
+        }
+
+        .game-card p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .play-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--card-color);
+            color: var(--card-color);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .game-card:hover .play-btn {
+            background: var(--card-color);
+            color: var(--dark-bg);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dc-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(255, 0, 110, 0.1) 100%);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 8px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .dc-badge:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 245, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .dc-badge svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--neon-cyan);
+        }
+
+        .dc-badge span {
+            font-size: 0.9rem;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Scanline effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.1) 0px,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="scanlines"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="glitch-title">4 GAMES CHALLENGE</h1>
+            <p class="subtitle">
+                Built from a <span class="highlight">single chat session</span> using 
+                <span class="highlight">Desktop Commander</span> to prove a point about AI-augmented productivity.
+            </p>
+        </header>
+
+        <section class="story">
+            <h2>THE BACKSTORY</h2>
+            <p>
+                It started with a LinkedIn post about how AI tools are changing the way we work. 
+                Not replacing jobs, but making it so frictionless to work that we end up working <em>more</em>.
+            </p>
+            <p class="quote">
+                "I'm building from my iPad while 'watching TV.' Since I'm so much more productive, 
+                I'm just like, all right, I'm going to get it done... and the next thing I know, 16 hours later."
+            </p>
+            <p>
+                Someone replied with skepticism: <strong>"When you walk you can build 4 games and deploy to the stores. AI hype 🤡"</strong>
+            </p>
+            <p>
+                Fair point! Building 4 AAA games while walking is impossible. But small games? 
+                Challenge accepted. Here are 4 classic games, built and deployed to GitHub Pages from a single chat conversation.
+            </p>
+        </section>
+
+        <section class="games-section">
+            <h2>SELECT YOUR GAME</h2>
+            <div class="games-grid">
+                <a href="snake.html" class="game-card snake">
+                    <span class="game-icon">🐍</span>
+                    <h3>SNAKE</h3>
+                    <p>The classic Nokia game. Eat food, grow longer, don't hit yourself or the walls.</p>
+                    <span class="play-btn">PLAY → </span>
+                </a>
+
+                <a href="pong.html" class="game-card pong">
+                    <span class="game-icon">🏓</span>
+                    <h3>PONG</h3>
+                    <p>The grandfather of video games. Simple paddle action against AI or a friend.</p>
+                    <span class="play-btn">PLAY →</span>
+                </a>
+
+                <a href="breakout.html" class="game-card breakout">
+                    <span class="game-icon">🧱</span>
+                    <h3>BREAKOUT</h3>
+                    <p>Smash bricks with a bouncing ball. Satisfying destruction, one block at a time.</p>
+                    <span class="play-btn">PLAY →</span>
+                </a>
+
+                <a href="2048.html" class="game-card game-2048">
+                    <span class="game-icon">🔢</span>
+                    <h3>2048</h3>
+                    <p>Slide and merge tiles to reach 2048. Simple rules, addictive gameplay.</p>
+                    <span class="play-btn">PLAY →</span>
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <a href="https://desktopcommander.app" target="_blank" class="dc-badge">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4h16v12H4V4zm0 14h16v2H4v-2zm2-12v8h12V6H6z"/>
+                </svg>
+                <span>Built with <strong>Desktop Commander</strong></span>
+            </a>
+            <p class="footer-note">
+                Proving that AI doesn't replace work — it just makes starting easier.
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
